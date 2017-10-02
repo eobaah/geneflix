@@ -1,10 +1,10 @@
-require('dotenv').config()
 const express = require('express')
 const app = express()
+const config = require( './src/config' ).getConfig()
 const port = process.env.PORT
 
-app.get('/', function (req, res) {
-  res.send('Hello World!')
+app.get('/', function (request, response) {
+  response.send('Hello World!')
 })
 
 app.listen( port, ()=> {
