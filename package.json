@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
+    "db:migrate": "db-migrate up --config src/config/db-migrate.json -e",
+    "db:rollback": "db-migrate down $1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -32,6 +34,8 @@
     "express": "^4.16.1",
     "express-session": "^1.15.6",
     "method-override": "^2.3.10",
-    "moment": "^2.18.1"
+    "moment": "^2.18.1",
+    "pg": "^7.3.0",
+    "pg-promise": "^6.10.2"
   }
 }
