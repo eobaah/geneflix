@@ -1,0 +1,74 @@
+DROP DATABASE IF EXISTS geneflix;
+CREATE DATABASE geneflix;
+
+\c geneflix
+
+DROP TABLE IF EXISTS member;
+CREATE TABLE IF NOT EXISTS member(
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE,
+  email VARCHAR(255) UNIQUE,
+  password VARCHAR(255) UNIQUE,
+  role VARCHAR(50),
+  status VARCHAR(50),
+  date_joined TIMESTAMP(6) WITH TIME ZONE NOT NULL,
+);
+
+DROP TABLE IF EXISTS genre;
+CREATE TABLE IF NOT EXISTS genre(
+  id SERIAL PRIMARY KEY,
+  type VARCHAR(255)
+);
+
+DROP TABLE IF EXISTS director;
+CREATE TABLE IF NOT EXISTS director(
+  id SERIAL PRIMARY KEY,
+  fname VARCHAR(255),
+  lname VARCHAR(255)
+);
+
+DROP TABLE IF EXISTS content;
+CREATE TABLE IF NOT EXISTS content(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255),
+  description TEXT,
+  director_id INTEGER REFERENCES director(id),
+  genre_id INTEGER REFERENCES genre(id),
+  image_url VARCHAR(500),
+  release_year VARCHAR(500),
+  TRT INTEGER,
+  rating INTEGER,
+  keyword VARCHAR(1000)
+);
+
+DROP TABLE IF EXISTS rating;
+CREATE TABLE IF NOT EXISTS rating(
+  id SERIAL PRIMARY KEY,
+  member_id INTEGER REFERENCES member(id),
+  rating_number INTEGER,
+  review TEXT
+);
+
+DROP TABLE IF EXISTS liked_content;
+CREATE TABLE IF NOT EXISTS liked_content(
+  member_id INTEGER REFERENCES member(id),
+  content_id INTEGER REFERENCES content(id)
+);
+
+DROP TABLE IF EXISTS role;
+CREATE TABLE IF NOT EXISTS role(
+  member_id INTEGER REFERENCES member(id),
+  admin VARCHAR(10) NOT NULL,
+  standard VARCHAR(10) NOT NULL,
+  guest VARCHAR(10) NOT NULL
+);
+
+DROP TABLE IF EXISTS session;
+CREATE TABLE IF NOT EXISTS "session" (
+  "sid" VARCHAR NOT NULL COLLATE "default",
+	"sess" json NOT NULL,
+	"expire" TIMESTAMP(6) NOT NULL
+)
+
+WITH (OIDS=FALSE);
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
