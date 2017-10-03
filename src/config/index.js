@@ -7,7 +7,10 @@ module.exports = ( () => {
 
   const makeConfig = () => {
     if ( getEnv() === 'development' ) {
-      require( 'dotenv' ).config( {path: __dirname + '../../.env'})
+      let result = require( 'dotenv' ).config( {path: __dirname + '/../../.env'} )
+      if (result.error) {
+        throw result.error
+      }
     }
 
     config = {
@@ -21,6 +24,9 @@ module.exports = ( () => {
       },
       session: {
         secret: process.env.SECRET
+      },
+      server: {
+        port: process.env.PORT
       }
     }
     return config
