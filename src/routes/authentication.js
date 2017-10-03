@@ -1,18 +1,21 @@
 const express = require ( 'express' )
 const router = express.Router()
 const member = require( '../models/members')
-const passport = require( '../../authentication')
-module.exports = passport => {
-  router.route( '/login')
-  .get( (request, response ) => {
+const authPassport = require( '../../authentication')
+
+module.exports = authPassport => {
+  router.get( '/login', (request, response ) => {
     response.send( 'I am in the login page' )
   })
-  .post( passport.authenticate( 'local', {
+
+  router.post( '/login', authPassport.authenticate( 'local', {
     successRedirect: '/dashboard',
     failureRedirect: '/login',
-    failureFlash: true
-
-  }))
+    failureFlash: 'Invalid username or password.',
+    successFlash: 'Welcome!'
+  }), (request, response ) => {
+    response.send( `${request.user.username} is logged authenticated`)
+  })
 
   router.route( '/signup')
   .get( (request, response ) => {
